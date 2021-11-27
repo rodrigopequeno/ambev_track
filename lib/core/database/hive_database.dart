@@ -2,6 +2,8 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../features/collect/data/models/collect_model.dart';
+import '../../features/collect/data/models/geographic_coordinate_model.dart';
+import '../../features/collect/domain/entities/cardinal_point.dart';
 import 'database.dart';
 
 class HiveDatabaseImpl extends Database {
@@ -16,6 +18,13 @@ class HiveDatabaseImpl extends Database {
     await hive.initFlutter();
     if (!hive.isAdapterRegistered(CollectModelAdapter().typeId)) {
       hive.registerAdapter<CollectModel>(CollectModelAdapter());
+    }
+    if (!hive.isAdapterRegistered(GeographicCoordinateModelAdapter().typeId)) {
+      hive.registerAdapter<GeographicCoordinateModel>(
+          GeographicCoordinateModelAdapter());
+    }
+    if (!hive.isAdapterRegistered(CardinalPointAdapter().typeId)) {
+      hive.registerAdapter<CardinalPoint>(CardinalPointAdapter());
     }
   }
 

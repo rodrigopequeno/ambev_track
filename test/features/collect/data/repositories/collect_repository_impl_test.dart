@@ -3,7 +3,9 @@ import 'package:ambev_track/core/network/network_info.dart';
 import 'package:ambev_track/features/collect/data/datasources/collect_local_data_source.dart';
 import 'package:ambev_track/features/collect/data/datasources/collect_remote_data_source.dart';
 import 'package:ambev_track/features/collect/data/models/collect_model.dart';
+import 'package:ambev_track/features/collect/data/models/geographic_coordinate_model.dart';
 import 'package:ambev_track/features/collect/data/repositories/collect_repository_impl.dart';
+import 'package:ambev_track/features/collect/domain/entities/cardinal_point.dart';
 import 'package:ambev_track/features/collect/domain/repositories/collect_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -34,11 +36,23 @@ void main() {
     );
   });
 
+  final tLatitude = GeographicCoordinateModel(
+    cardinalPoint: CardinalPoint.south,
+    degrees: 10,
+    minutes: 50,
+    seconds: 30,
+  );
+  final tLongitude = GeographicCoordinateModel(
+    cardinalPoint: CardinalPoint.west,
+    degrees: 37,
+    minutes: 10,
+    seconds: 30,
+  );
   final tNewCollect = CollectModel(
     dateTime: DateTime.now(),
     duration: const Duration(hours: 1, minutes: 30),
-    latitude: -10.9282011,
-    longitude: -37.0922412,
+    latitude: tLatitude,
+    longitude: tLongitude,
   );
 
   setUpAll(() {

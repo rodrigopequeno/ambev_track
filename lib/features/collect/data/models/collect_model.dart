@@ -1,13 +1,14 @@
 import 'package:hive/hive.dart';
 
 import '../../domain/entities/collect.dart';
+import 'geographic_coordinate_model.dart';
 
 class CollectModel extends Collect {
   const CollectModel({
     required DateTime dateTime,
     required Duration duration,
-    required double latitude,
-    required double longitude,
+    required GeographicCoordinateModel latitude,
+    required GeographicCoordinateModel longitude,
   }) : super(
           dateTime: dateTime,
           duration: duration,
@@ -19,8 +20,8 @@ class CollectModel extends Collect {
     return {
       'dateTime': dateTime.millisecondsSinceEpoch,
       'duration': duration.inMilliseconds,
-      'latitude': latitude,
-      'longitude': longitude,
+      'latitude': latitude.toMap(),
+      'longitude': longitude.toMap(),
     };
   }
 
@@ -28,8 +29,8 @@ class CollectModel extends Collect {
     return CollectModel(
       dateTime: DateTime.fromMillisecondsSinceEpoch(map['dateTime']),
       duration: Duration(milliseconds: map['duration']),
-      latitude: map['latitude'],
-      longitude: map['longitude'],
+      latitude: GeographicCoordinateModel.fromMap(map['latitude']),
+      longitude: GeographicCoordinateModel.fromMap(map['longitude']),
     );
   }
 }
@@ -47,8 +48,8 @@ class CollectModelAdapter extends TypeAdapter<CollectModel> {
     return CollectModel(
       dateTime: fields[0] as DateTime,
       duration: fields[1] as Duration,
-      latitude: fields[2] as double,
-      longitude: fields[3] as double,
+      latitude: fields[2] as GeographicCoordinateModel,
+      longitude: fields[3] as GeographicCoordinateModel,
     );
   }
 

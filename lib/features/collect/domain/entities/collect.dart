@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
 
+import '../../data/models/geographic_coordinate_model.dart';
+
 class Collect extends Equatable {
   final DateTime dateTime;
   final Duration duration;
-  final double latitude;
-  final double longitude;
+  final GeographicCoordinateModel latitude;
+  final GeographicCoordinateModel longitude;
 
   const Collect({
     required this.dateTime,
