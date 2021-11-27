@@ -1,17 +1,18 @@
-import 'package:ambev_track/features/add_collect/domain/entities/collect.dart';
-import 'package:ambev_track/features/add_collect/domain/repositories/add_collect_repository.dart';
-import 'package:ambev_track/features/add_collect/domain/usecases/insert_new_collect.dart';
+import 'package:ambev_track/features/collect/domain/entities/collect.dart';
+import 'package:ambev_track/features/collect/domain/repositories/collect_repository.dart';
+import 'package:ambev_track/features/collect/domain/usecases/insert_new_collect.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAddCollectRepository extends Mock implements AddCollectRepository {}
+class MockAddCollectRepository extends Mock implements CollectRepository {}
 
 void main() {
   late InsertNewCollect usecase;
   late MockAddCollectRepository mockAddCollectRepository;
 
   final tNewCollect = Collect(
+    dateTime: DateTime.now(),
     duration: const Duration(hours: 1, minutes: 30),
     latitude: -10.9282011,
     longitude: -37.0922412,

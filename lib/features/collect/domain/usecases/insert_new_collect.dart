@@ -4,10 +4,10 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/collect.dart';
-import '../repositories/add_collect_repository.dart';
+import '../repositories/collect_repository.dart';
 
 class InsertNewCollect implements UseCase<void, InsertNewCollectParams> {
-  final AddCollectRepository repository;
+  final CollectRepository repository;
 
   InsertNewCollect({required this.repository});
 
