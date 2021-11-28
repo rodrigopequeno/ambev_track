@@ -6,7 +6,7 @@ abstract class CollectRemoteDataSource {
   Future<void> insertNewCollect({required CollectModel collectModel});
 }
 
-const insertNewCollectPath = "/add-collect";
+const insertNewCollectPath = "/7bbc6148-ba08-4722-96d3-096b35b67fb4";
 
 class CollectRemoteDataSourceImpl implements CollectRemoteDataSource {
   final Service service;
