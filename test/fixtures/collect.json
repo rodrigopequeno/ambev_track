@@ -1,0 +1,16 @@
+{
+  "dateTime": 1611759600000,
+  "duration": 5400000,
+  "latitude": {
+    "degrees": 10,
+    "minutes": 50,
+    "seconds": 30,
+    "cardinalPoint": "S"
+  },
+  "longitude": {
+    "degrees": 37,
+    "minutes": 10,
+    "seconds": 30,
+    "cardinalPoint": "W"
+  }
+}
