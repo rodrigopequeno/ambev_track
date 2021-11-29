@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 
 class MockHiveInterface extends Mock implements HiveInterface {}
 
-class MockBox extends Mock implements Box {}
+class MockBox extends Mock implements Box<List<int>> {}
 
 void main() {
   late Database database;
@@ -43,13 +43,14 @@ void main() {
     test(
       '''should return the data saved in the database''',
       () async {
-        when(() => mockHiveInterface.openBox(any()))
+        when(() => mockHiveInterface.openBox<List<int>>(any()))
             .thenAnswer((_) async => mockHiveBox);
 
-        when(() => mockHiveBox.get(any())).thenReturn([]);
-        final result = await database.get(boxName: tBox, key: tKey);
+        when(() => mockHiveBox.get(any())).thenReturn([0]);
+        final result =
+            await database.get<String, List>(boxName: tBox, key: tKey);
         verify(() => mockHiveBox.get(tKey));
-        expect(result, equals([]));
+        expect(result, equals([0]));
       },
     );
   });
@@ -59,11 +60,12 @@ void main() {
       '''should save the data in the database''',
       () async {
         final tData = [0];
-        when(() => mockHiveInterface.openBox(any()))
+        when(() => mockHiveInterface.openBox<List<int>>(any()))
             .thenAnswer((_) async => mockHiveBox);
 
         when(() => mockHiveBox.put(any(), any())).thenAnswer((_) async {});
-        await database.put(boxName: tBox, key: tKey, value: tData);
+        await database.put<String, List>(
+            boxName: tBox, key: tKey, value: tData);
         verify(() => mockHiveBox.put(tKey, tData));
       },
     );
@@ -73,11 +75,11 @@ void main() {
     test(
       '''should delete a data from the database''',
       () async {
-        when(() => mockHiveInterface.openBox(any()))
+        when(() => mockHiveInterface.openBox<List<int>>(any()))
             .thenAnswer((_) async => mockHiveBox);
 
         when(() => mockHiveBox.delete(any())).thenAnswer((_) async {});
-        await database.delete(boxName: tBox, key: tKey);
+        await database.delete<String, List<int>>(boxName: tBox, key: tKey);
         verify(() => mockHiveBox.delete(tKey));
       },
     );

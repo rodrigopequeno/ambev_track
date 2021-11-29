@@ -1,5 +1,5 @@
 abstract class Database {
-  Future<void> initialize();
+  Future<Database> initialize();
   Future<V?> get<K, V>({
     required String boxName,
     required K key,
@@ -10,7 +10,7 @@ abstract class Database {
     required K key,
     required V value,
   });
-  Future<void> delete<K>({
+  Future<void> delete<K, V>({
     required String boxName,
     required K key,
   });

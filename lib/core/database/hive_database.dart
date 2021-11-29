@@ -14,7 +14,7 @@ class HiveDatabaseImpl extends Database {
   });
 
   @override
-  Future<void> initialize() async {
+  Future<Database> initialize() async {
     await hive.initFlutter();
     if (!hive.isAdapterRegistered(CollectModelAdapter().typeId)) {
       hive.registerAdapter<CollectModel>(CollectModelAdapter());
@@ -26,10 +26,11 @@ class HiveDatabaseImpl extends Database {
     if (!hive.isAdapterRegistered(CardinalPointAdapter().typeId)) {
       hive.registerAdapter<CardinalPoint>(CardinalPointAdapter());
     }
+    return this;
   }
 
-  Future<Box> _openBox(String key) async {
-    final box = await hive.openBox(key);
+  Future<Box<T>> _openBox<T>(String key) async {
+    final box = await hive.openBox<T>(key);
     return box;
   }
 
@@ -39,7 +40,7 @@ class HiveDatabaseImpl extends Database {
     required K key,
     V? defaultValue,
   }) async {
-    final box = await _openBox(boxName);
+    final box = await _openBox<V>(boxName);
     final value = box.get(key, defaultValue: defaultValue);
     return value;
   }
@@ -50,16 +51,16 @@ class HiveDatabaseImpl extends Database {
     required K key,
     required V value,
   }) async {
-    final box = await _openBox(boxName);
+    final box = await _openBox<V>(boxName);
     box.put(key, value);
   }
 
   @override
-  Future<void> delete<K>({
+  Future<void> delete<K, V>({
     required String boxName,
     required K key,
   }) async {
-    final box = await _openBox(boxName);
+    final box = await _openBox<V>(boxName);
     box.delete(key);
   }
 }

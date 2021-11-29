@@ -39,20 +39,25 @@ void main() {
 
   group('saveCacheNewCollect', () {
     test('should call Database to cache the data', () async {
-      when(() => database.get(
-            boxName: any(named: "boxName"),
-            key: any(named: "key"),
-          )).thenAnswer((_) async => Future<List<CollectModel>>.value([]));
-      when(() => database.put(
+      when(() => database.get<String, List>(
+                boxName: any(named: "boxName"),
+                key: any(named: "key"),
+                defaultValue: any(named: "defaultValue"),
+              ))
+          .thenAnswer(
+              (_) async => Future<List<CollectModel>>.value(<CollectModel>[]));
+      when(() => database.put<String, List>(
             boxName: any(named: "boxName"),
             key: any(named: "key"),
             value: any(named: "value"),
           )).thenAnswer((_) async => Future<void>.value());
       await collectDataSource.saveCacheNewCollect(collectModel: tNewCollect);
+      verify(() => database.get<String, List>(
+          boxName: boxCacheCollect,
+          key: boxCacheCollect,
+          defaultValue: <CollectModel>[]));
       verify(
-          () => database.get(boxName: boxCacheCollect, key: boxCacheCollect));
-      verify(
-        () => database.put(
+        () => database.put<String, List>(
           boxName: boxCacheCollect,
           key: boxCacheCollect,
           value: [tNewCollect],
@@ -63,20 +68,25 @@ void main() {
 
   group('saveUnsentCollect', () {
     test('should call Database to unsent the data', () async {
-      when(() => database.get(
+      when(() => database.get<String, List>(
             boxName: any(named: "boxName"),
             key: any(named: "key"),
+            defaultValue: any(named: "defaultValue"),
           )).thenAnswer((_) async => Future<List<CollectModel>>.value([]));
-      when(() => database.put(
+      when(() => database.put<String, List>(
             boxName: any(named: "boxName"),
             key: any(named: "key"),
             value: any(named: "value"),
           )).thenAnswer((_) async => Future<void>.value());
       await collectDataSource.saveUnsentCollect(collectModel: tNewCollect);
       verify(
-          () => database.get(boxName: boxUnsentCollect, key: boxUnsentCollect));
+        () => database.get<String, List>(
+            boxName: boxUnsentCollect,
+            key: boxUnsentCollect,
+            defaultValue: <CollectModel>[]),
+      );
       verify(
-        () => database.put(
+        () => database.put<String, List>(
           boxName: boxUnsentCollect,
           key: boxUnsentCollect,
           value: [tNewCollect],
