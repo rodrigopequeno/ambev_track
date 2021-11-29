@@ -17,6 +17,10 @@ class InvalidGeographicLatitudeFailure extends Failure {}
 
 class InvalidGeographicLongitudeFailure extends Failure {}
 
-class InvalidGeographicLatitudeDegreeusFailure extends Failure {}
+class InvalidGeographicCardinalLatitudeFailure extends Failure {}
 
-class InvalidGeographicLongitudeDegreeusFailure extends Failure {}
+class InvalidGeographicCardinalLongitudeFailure extends Failure {}
+
+class InvalidGeographicLatitudeDegreesFailure extends Failure {}
+
+class InvalidGeographicLongitudeDegreesFailure extends Failure {}

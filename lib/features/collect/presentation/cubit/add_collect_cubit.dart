@@ -31,10 +31,14 @@ const _messageInvalidGeographicLatitudeError =
     "Coordenadas geograficas de latitude invalida.";
 const _messageInvalidGeographicLongitudeError =
     "Coordenadas geograficas de longitude invalida.";
-const _messageInvalidGeographicLatitudeDegreeusError =
+const _messageInvalidGeographicLatitudeDegreesError =
     "O grau das coordenadas de latitude deve variar entre 0 e 90.";
-const _messageInvalidGeographicLongitudeDegreeusError =
+const _messageInvalidGeographicLongitudeDegreesError =
     "O grau das coordenadas de longitude deve variar entre 0 e 180.";
+const _messageInvalidGeographicLatitudeCardinalError =
+    "Indique se é N(Norte) ou S(Sul) ao final da coordenada de latitude.";
+const _messageInvalidGeographicLongitudeCardinalError =
+    "Indique se é W(Oeste) ou E(Leste) ao final da coordenada de longitude.";
 
 class AddCollectCubit extends Cubit<AddCollectState> {
   final InsertNewCollect _insertNewCollect;
@@ -121,18 +125,29 @@ class AddCollectCubit extends Cubit<AddCollectState> {
         ),
       );
       resultValidate.fold((l) {
+        /// Format Error
         if (l is InvalidGeographicLatitudeFailure) {
           emit(AddCollectErrorCoordinateLatitudeField(
               _messageInvalidGeographicLatitudeError));
         } else if (l is InvalidGeographicLongitudeFailure) {
           emit(AddCollectErrorCoordinateLongitudeField(
               _messageInvalidGeographicLongitudeError));
-        } else if (l is InvalidGeographicLatitudeDegreeusFailure) {
+
+          /// Degrees Error
+        } else if (l is InvalidGeographicLatitudeDegreesFailure) {
           emit(AddCollectErrorCoordinateLatitudeField(
-              _messageInvalidGeographicLatitudeDegreeusError));
-        } else if (l is InvalidGeographicLongitudeDegreeusFailure) {
+              _messageInvalidGeographicLatitudeDegreesError));
+        } else if (l is InvalidGeographicLongitudeDegreesFailure) {
           emit(AddCollectErrorCoordinateLongitudeField(
-              _messageInvalidGeographicLongitudeDegreeusError));
+              _messageInvalidGeographicLongitudeDegreesError));
+
+          /// Cardinal Error
+        } else if (l is InvalidGeographicCardinalLatitudeFailure) {
+          emit(AddCollectErrorCoordinateLatitudeField(
+              _messageInvalidGeographicLatitudeCardinalError));
+        } else if (l is InvalidGeographicCardinalLongitudeFailure) {
+          emit(AddCollectErrorCoordinateLongitudeField(
+              _messageInvalidGeographicLongitudeCardinalError));
         }
       }, (geographicCoordinate) async {
         final latitude = geographicCoordinate.value1;

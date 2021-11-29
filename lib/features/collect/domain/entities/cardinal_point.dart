@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+import '../../../../core/error/exceptions/invalid_symbol_exception.dart';
+
 enum CardinalPoint {
   /// Latitude - North
   north,
@@ -28,13 +30,16 @@ extension CardinalPointExtension on CardinalPoint {
     }
   }
 
-  static fromSymbol(String symbol) {
-    return CardinalPoint.values.firstWhere(
-      (element) => element.symbol.toUpperCase() == symbol.toUpperCase(),
-      orElse: () {
-        throw Exception();
-      },
-    );
+  static CardinalPoint fromSymbol(String symbol) {
+    final cardinalPointsSymbols =
+        CardinalPoint.values.map((e) => e.symbol.toUpperCase()).toList();
+    if (cardinalPointsSymbols.contains(symbol.toUpperCase())) {
+      return CardinalPoint.values.firstWhere(
+        (element) => element.symbol.toUpperCase() == symbol.toUpperCase(),
+      );
+    } else {
+      throw InvalidSymbolException(symbol: symbol);
+    }
   }
 }
 
