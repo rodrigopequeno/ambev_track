@@ -1,3 +1,4 @@
+import 'package:asuka/asuka.dart' as asuka;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -13,6 +14,7 @@ class AppWidget extends StatelessWidget {
     return const MaterialApp(
       title: appName,
       initialRoute: SplashScreenPage.routerName,
+      builder: asuka.builder,
     ).modular();
   }
 }

@@ -12,3 +12,11 @@ abstract class Failure extends Equatable {
 class SaveCollectFailure extends Failure {}
 
 class ServerFailure extends Failure {}
+
+class InvalidGeographicLatitudeFailure extends Failure {}
+
+class InvalidGeographicLongitudeFailure extends Failure {}
+
+class InvalidGeographicLatitudeDegreeusFailure extends Failure {}
+
+class InvalidGeographicLongitudeDegreeusFailure extends Failure {}
