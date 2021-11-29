@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/error/exceptions/invalid_geographic_coordinate_exception.dart';
+import '../../../../core/error/exceptions/invalid_symbol_exception.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/cardinal_point.dart';
@@ -11,7 +13,9 @@ const _regexCoordinateExpression =
 const _regexCoordinateDegreesExpression = r"""(\d+)\°""";
 const _regexCoordinateMinutesExpression = r"""(\d+)\'""";
 const _regexCoordinateSecondsExpression = r'''(\d{1,}\.?\,?\d{0,}?)\"''';
-const _regexCoordinateCardinalExpression = r"""(N|S|E|W)\'""";
+const _regexCoordinateCardinalExpression = r"""(N|S|E|W)""";
+const _regexCoordinateCardinalLatitudeExpression = r"""(N|S)""";
+const _regexCoordinateCardinalLongitudeExpression = r"""(E|W)""";
 
 class ValidateGeographicCoordinate
     implements
@@ -22,14 +26,28 @@ class ValidateGeographicCoordinate
   @override
   Future<Either<Failure, Tuple2<GeographicCoordinate, GeographicCoordinate>>>
       call(ValidateGeographicCoordinateParams params) async {
+    final cardinalLatitudeRegExp =
+        RegExp(_regexCoordinateCardinalLatitudeExpression);
+    final cardinalLongitudeRegExp =
+        RegExp(_regexCoordinateCardinalLongitudeExpression);
+    final isValidCardinalLatitude =
+        cardinalLatitudeRegExp.hasMatch(params.latitudeText);
+    final isValidCardinalLongitude =
+        cardinalLongitudeRegExp.hasMatch(params.longitudeText);
+
+    if (!isValidCardinalLatitude) {
+      return Left(InvalidGeographicCardinalLatitudeFailure());
+    } else if (!isValidCardinalLongitude) {
+      return Left(InvalidGeographicCardinalLongitudeFailure());
+    }
     final coordinateRegExp = RegExp(_regexCoordinateExpression);
-    if (!coordinateRegExp.hasMatch(params.latitudeText) ||
-        !coordinateRegExp.hasMatch(params.longitudeText)) {
-      if (!coordinateRegExp.hasMatch(params.latitudeText)) {
-        return Left(InvalidGeographicLatitudeFailure());
-      } else {
-        return Left(InvalidGeographicLongitudeFailure());
-      }
+    final isValidLatitude = coordinateRegExp.hasMatch(params.latitudeText);
+    final isValidLongitude = coordinateRegExp.hasMatch(params.longitudeText);
+
+    if (!isValidLatitude) {
+      return Left(InvalidGeographicLatitudeFailure());
+    } else if (!isValidLongitude) {
+      return Left(InvalidGeographicLongitudeFailure());
     }
 
     GeographicCoordinate geographicCoordinateLatitude;
@@ -37,18 +55,20 @@ class ValidateGeographicCoordinate
     try {
       geographicCoordinateLatitude = fromText(
         coordinateText: params.latitudeText,
-        cardinalPointDefault: CardinalPoint.north,
       );
-    } catch (e) {
-      return Left(InvalidGeographicLatitudeDegreeusFailure());
+    } on InvalidGeographicCoordinateException {
+      return Left(InvalidGeographicLatitudeDegreesFailure());
+    } on InvalidSymbolException {
+      return Left(InvalidGeographicCardinalLatitudeFailure());
     }
     try {
       geographicCoordinateLongitude = fromText(
         coordinateText: params.longitudeText,
-        cardinalPointDefault: CardinalPoint.east,
       );
-    } catch (e) {
-      return Left(InvalidGeographicLongitudeDegreeusFailure());
+    } on InvalidGeographicCoordinateException {
+      return Left(InvalidGeographicLongitudeDegreesFailure());
+    } on InvalidSymbolException {
+      return Left(InvalidGeographicCardinalLongitudeFailure());
     }
 
     return Right(
@@ -61,7 +81,6 @@ class ValidateGeographicCoordinate
 
   GeographicCoordinate fromText({
     required String coordinateText,
-    required CardinalPoint cardinalPointDefault,
   }) {
     final degreesRegExp = RegExp(_regexCoordinateDegreesExpression);
     final minutesRegExp = RegExp(_regexCoordinateMinutesExpression);
@@ -76,9 +95,11 @@ class ValidateGeographicCoordinate
             ?.replaceAll('"', "")
             .replaceAll(",", ".") ??
         "0");
-    final cardinalPoint = CardinalPointExtension.fromSymbol(
-        cardinalRegExp.stringMatch(coordinateText) ??
-            cardinalPointDefault.symbol);
+    final cardinalText = cardinalRegExp.stringMatch(coordinateText);
+    if (cardinalText == null) {
+      throw InvalidSymbolException(symbol: "");
+    }
+    final cardinalPoint = CardinalPointExtension.fromSymbol(cardinalText);
 
     return GeographicCoordinate(
       degrees: degrees ?? 0,

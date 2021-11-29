@@ -168,7 +168,7 @@ void main() {
       build: () {
         setUpMockDurationConverterSuccess();
         when(() => mockValidateGeographicCoordinate(any())).thenAnswer(
-            (_) async => Left(InvalidGeographicLatitudeDegreeusFailure()));
+            (_) async => Left(InvalidGeographicLatitudeDegreesFailure()));
         return cubit;
       },
       act: (cubit) => cubit.addCollect(),
@@ -181,7 +181,33 @@ void main() {
       build: () {
         setUpMockDurationConverterSuccess();
         when(() => mockValidateGeographicCoordinate(any())).thenAnswer(
-            (_) async => Left(InvalidGeographicLongitudeDegreeusFailure()));
+            (_) async => Left(InvalidGeographicLongitudeDegreesFailure()));
+        return cubit;
+      },
+      act: (cubit) => cubit.addCollect(),
+      expect: () =>
+          [AddCollectLoading(), isA<AddCollectErrorCoordinateLongitudeField>()],
+    );
+
+    blocTest<AddCollectCubit, AddCollectState>(
+      'should issue [AddCollectErrorCoordinateLatitudeField] when the geographic coordinate latitude does not contain the cardinal point',
+      build: () {
+        setUpMockDurationConverterSuccess();
+        when(() => mockValidateGeographicCoordinate(any())).thenAnswer(
+            (_) async => Left(InvalidGeographicCardinalLatitudeFailure()));
+        return cubit;
+      },
+      act: (cubit) => cubit.addCollect(),
+      expect: () =>
+          [AddCollectLoading(), isA<AddCollectErrorCoordinateLatitudeField>()],
+    );
+
+    blocTest<AddCollectCubit, AddCollectState>(
+      'should emit [AddCollectErrorCoordinateLongitudeField] when the geographic coordinate longitude does not contain the cardinal point',
+      build: () {
+        setUpMockDurationConverterSuccess();
+        when(() => mockValidateGeographicCoordinate(any())).thenAnswer(
+            (_) async => Left(InvalidGeographicCardinalLongitudeFailure()));
         return cubit;
       },
       act: (cubit) => cubit.addCollect(),
