@@ -36,3 +36,16 @@ flutter:
 
   assets:
     - assets/images/logo.png
+
+  fonts:
+    - family: Outfit
+      fonts:
+        - asset: assets/fonts/Outfit/Outfit-Black.ttf
+        - asset: assets/fonts/Outfit/Outfit-Bold.ttf
+        - asset: assets/fonts/Outfit/Outfit-ExtraBold.ttf
+        - asset: assets/fonts/Outfit/Outfit-ExtraLight.ttf
+        - asset: assets/fonts/Outfit/Outfit-Light.ttf
+        - asset: assets/fonts/Outfit/Outfit-Medium.ttf
+        - asset: assets/fonts/Outfit/Outfit-Regular.ttf
+        - asset: assets/fonts/Outfit/Outfit-SemiBold.ttf
+        - asset: assets/fonts/Outfit/Outfit-Thin.ttf

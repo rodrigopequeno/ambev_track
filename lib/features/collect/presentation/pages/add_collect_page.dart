@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../../core/design_system/colors.dart';
 import '../../../../core/spacers/spacers.dart';
 import '../cubit/add_collect_cubit.dart';
 
@@ -96,9 +97,12 @@ class _AddCollectPageState
           onPressed: _addCollect,
           style: ElevatedButton.styleFrom(
             fixedSize: const Size(175, 40),
-            primary: Colors.orange,
+            primary: ColorSystem.primaryYellow,
           ),
-          child: const Text("Enviar"),
+          child: const Text("Enviar",
+              style: TextStyle(
+                color: ColorSystem.primaryDark,
+              )),
         );
       },
     );
