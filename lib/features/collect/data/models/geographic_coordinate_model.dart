@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 
-import '../../../../core/error/exceptions/invalid_geographic_coordinate_exception.dart';
 import '../../domain/entities/cardinal_point.dart';
 import '../../domain/entities/geographic_coordinate.dart';
 
@@ -15,13 +14,24 @@ class GeographicCoordinateModel extends GeographicCoordinate {
           degrees: degrees,
           minutes: minutes,
           seconds: seconds,
-        ) {
-    if (!_isValid(degrees: degrees, cardinalPoint: cardinalPoint)) {
-      throw InvalidGeographicCoordinateException(
-        degrees: degrees,
-        cardinalPoint: cardinalPoint,
-      );
-    }
+        );
+
+  Map<String, dynamic> toMap() {
+    return {
+      'degrees': degrees,
+      'minutes': minutes,
+      'seconds': seconds,
+      'cardinalPoint': cardinalPoint.symbol,
+    };
+  }
+
+  factory GeographicCoordinateModel.fromMap(Map<String, dynamic> map) {
+    return GeographicCoordinateModel(
+      degrees: map['degrees'].toDouble(),
+      minutes: map['minutes'].toDouble(),
+      seconds: map['seconds'].toDouble(),
+      cardinalPoint: CardinalPointExtension.fromSymbol(map['cardinalPoint']),
+    );
   }
 
   factory GeographicCoordinateModel.fromDecimal({
@@ -42,53 +52,6 @@ class GeographicCoordinateModel extends GeographicCoordinate {
       minutes: minutes.toDouble(),
       seconds: seconds,
       cardinalPoint: cardinalPoint,
-    );
-  }
-
-  bool _isValid({
-    required double degrees,
-    required CardinalPoint cardinalPoint,
-  }) {
-    switch (cardinalPoint) {
-      case CardinalPoint.south:
-      case CardinalPoint.north:
-        if (0 <= degrees && degrees <= 90) {
-          return true;
-        }
-        return false;
-      case CardinalPoint.west:
-      case CardinalPoint.east:
-        if (0 <= degrees && degrees <= 180) {
-          return true;
-        }
-        return false;
-    }
-  }
-
-  double toDecimal() {
-    final decimal = (degrees + (minutes / 60) + (seconds / 3600));
-    if (cardinalPoint == CardinalPoint.south ||
-        cardinalPoint == CardinalPoint.west) {
-      return decimal * -1;
-    }
-    return decimal;
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'degrees': degrees,
-      'minutes': minutes,
-      'seconds': seconds,
-      'cardinalPoint': cardinalPoint.symbol,
-    };
-  }
-
-  factory GeographicCoordinateModel.fromMap(Map<String, dynamic> map) {
-    return GeographicCoordinateModel(
-      degrees: map['degrees'].toDouble(),
-      minutes: map['minutes'].toDouble(),
-      seconds: map['seconds'].toDouble(),
-      cardinalPoint: CardinalPointExtension.fromSymbol(map['cardinalPoint']),
     );
   }
 
