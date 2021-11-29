@@ -41,6 +41,24 @@ void main() {
         ),
         throwsA(isA<InvalidGeographicCoordinateException>()),
       );
+      expect(
+        () => GeographicCoordinateModel(
+          cardinalPoint: CardinalPoint.south,
+          degrees: 89,
+          minutes: 99,
+          seconds: 99,
+        ),
+        throwsA(isA<InvalidGeographicCoordinateException>()),
+      );
+      expect(
+        () => GeographicCoordinateModel(
+          cardinalPoint: CardinalPoint.north,
+          degrees: 89,
+          minutes: 99,
+          seconds: 99,
+        ),
+        throwsA(isA<InvalidGeographicCoordinateException>()),
+      );
     });
 
     test(
@@ -83,6 +101,24 @@ void main() {
           degrees: 181,
           minutes: 50,
           seconds: 30,
+        ),
+        throwsA(isA<InvalidGeographicCoordinateException>()),
+      );
+      expect(
+        () => GeographicCoordinateModel(
+          cardinalPoint: CardinalPoint.south,
+          degrees: 179,
+          minutes: 99,
+          seconds: 99,
+        ),
+        throwsA(isA<InvalidGeographicCoordinateException>()),
+      );
+      expect(
+        () => GeographicCoordinateModel(
+          cardinalPoint: CardinalPoint.north,
+          degrees: 179,
+          minutes: 99,
+          seconds: 99,
         ),
         throwsA(isA<InvalidGeographicCoordinateException>()),
       );

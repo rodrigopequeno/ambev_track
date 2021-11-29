@@ -64,9 +64,8 @@ void main() {
   }
 
   group('insertNewCollect', () {
-    /// TODO: Falta o endpoint
     test(
-        'must perform a POST request on a URL with "path" being the endpoint and with the collect data',
+        'should perform a POST request on a URL the endpoint and with the collect data',
         () async {
       setUpMockServiceSuccess();
       await collectDataSource.insertNewCollect(collectModel: tNewCollect);

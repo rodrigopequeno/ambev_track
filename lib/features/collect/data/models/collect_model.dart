@@ -4,12 +4,17 @@ import '../../domain/entities/collect.dart';
 import 'geographic_coordinate_model.dart';
 
 class CollectModel extends Collect {
+  final GeographicCoordinateModel latitudeModel;
+  final GeographicCoordinateModel longitudeModel;
+
   const CollectModel({
     required DateTime dateTime,
     required Duration duration,
     required GeographicCoordinateModel latitude,
     required GeographicCoordinateModel longitude,
-  }) : super(
+  })  : latitudeModel = latitude,
+        longitudeModel = longitude,
+        super(
           dateTime: dateTime,
           duration: duration,
           latitude: latitude,
@@ -20,8 +25,8 @@ class CollectModel extends Collect {
     return {
       'dateTime': dateTime.millisecondsSinceEpoch,
       'duration': duration.inMilliseconds,
-      'latitude': latitude.toMap(),
-      'longitude': longitude.toMap(),
+      'latitude': latitudeModel.toMap(),
+      'longitude': longitudeModel.toMap(),
     };
   }
 
@@ -47,7 +52,7 @@ class CollectModelAdapter extends TypeAdapter<CollectModel> {
     };
     return CollectModel(
       dateTime: fields[0] as DateTime,
-      duration: fields[1] as Duration,
+      duration: Duration(microseconds: fields[1]),
       latitude: fields[2] as GeographicCoordinateModel,
       longitude: fields[3] as GeographicCoordinateModel,
     );
@@ -60,7 +65,7 @@ class CollectModelAdapter extends TypeAdapter<CollectModel> {
       ..writeByte(0)
       ..write(obj.dateTime)
       ..writeByte(1)
-      ..write(obj.duration)
+      ..write(obj.duration.inMicroseconds)
       ..writeByte(2)
       ..write(obj.latitude)
       ..writeByte(3)
