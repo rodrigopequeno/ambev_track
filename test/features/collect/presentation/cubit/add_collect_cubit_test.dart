@@ -8,7 +8,6 @@ import 'package:ambev_track/features/collect/domain/usecases/validate_geographic
 import 'package:ambev_track/features/collect/presentation/cubit/add_collect_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
-import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -29,7 +28,6 @@ void main() {
   late MockInsertNewCollect mockInsertNewCollect;
   late MockValidateGeographicCoordinate mockValidateGeographicCoordinate;
   late MockDurationConverter mockDurationConverter;
-  late MockBuildContext mockBuildContext;
 
   const tDurationText = "01h 30m 00s";
   const tDuration = Duration(hours: 1, minutes: 30);
@@ -60,7 +58,6 @@ void main() {
     mockInsertNewCollect = MockInsertNewCollect();
     mockValidateGeographicCoordinate = MockValidateGeographicCoordinate();
     mockDurationConverter = MockDurationConverter();
-    mockBuildContext = MockBuildContext();
 
     cubit = AddCollectCubit(
       insertNewCollect: mockInsertNewCollect,
